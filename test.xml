@@ -1,0 +1,36 @@
+<project name="rectangle">
+  <property environment="env"/>
+
+  <property name="src.dir" location="src" />
+  <property name="build.dir" location="bin" />
+  <property name="report.dir" location="reports" />
+
+  <path id="junit.class.path">
+    <pathelement location="./lib/junit-4.10.jar" />
+    <pathelement location="${build.dir}" />
+  </path>
+
+  <target name="clean">
+    <delete dir="${build.dir}"  />
+    <delete dir="${report.dir}" />
+  </target>
+
+  <target name="makedir">
+    <mkdir dir="${build.dir}" />
+    <mkdir dir="${report.dir}" />
+  </target>
+
+  <target name="compile" depends="clean, makedir">
+    <javac srcdir="src.dir" destdir="${build.dir}">
+      <classpath refid="junit.class.path" />
+    </javac>
+  </target>
+
+  <junit printsummary="yes" fork="true">
+    <classpath refid="junit.class.path" />
+    <test name="RectangleTest" todir="${report.dir}" outfile="${env.BUILD_NUMBER}_result">
+      <formatter type="xml" />
+    </test>
+  </junit>
+
+</project>
