@@ -10,6 +10,6 @@ public class RectangleTestRunner {
       System.out.println(failure.toString());
     }
 
-    System.out.prinln(result.wasSuccessful());
+    System.out.println(result.wasSuccessful());
   }
 }
