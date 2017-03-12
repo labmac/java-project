@@ -26,11 +26,16 @@
     </javac>
   </target>
 
-  <junit printsummary="yes" fork="true">
-    <classpath refid="junit.class.path" />
-    <test name="RectangleTest" todir="${report.dir}" outfile="${env.BUILD_NUMBER}_result">
-      <formatter type="xml" />
-    </test>
-  </junit>
+  <target name="test" depends="clean, makedir, compile">
+    <junit printsummary="yes" fork="true">
+      <classpath refid="junit.class.path" />
+      <test name="RectangleTest" todir="${report.dir}" outfile="${env.BUILD_NUMBER}_result">
+        <formatter type="xml" />
+      </test>
+    </junit>
+  </target>
 
+  <target name="main" depends="test">
+    <description>Main target</description>
+  </target>
 </project>
