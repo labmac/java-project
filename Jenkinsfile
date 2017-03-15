@@ -19,7 +19,7 @@ pipeline {
         sh 'ant -f build.xml -v'
       }
       post {
-        success {
+        always {
           archiveArtifacts artifacts: 'dist/*.jar', fingerprint: true
         }
       }
@@ -35,15 +35,6 @@ pipeline {
     stage("Running on CentOS") {
       agent {
         label 'CentOS'
-      }
-      steps {
-        sh "wget http://brandon4231.mylabserver.com/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar"
-        sh "java -jar rectangle_${env.BUILD_NUMBER}.jar 3 4"
-      }
-    }
-    stage("Test on Debian") {
-      agent {
-        docker 'openjdk:8u121-jre'
       }
       steps {
         sh "wget http://brandon4231.mylabserver.com/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar"
