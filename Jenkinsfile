@@ -7,6 +7,8 @@ pipeline {
         label 'apache'
       }
       steps {
+        sh 'export GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)'
+        echo "$GIT_BRANCH"
         sh 'ant -f test.xml -v'
         junit 'reports/result.xml'
       }
@@ -46,7 +48,7 @@ pipeline {
         label 'apache'
       }
       when {
-        branch 'development'
+        expression { $env.GIT_BRANCH == 'development' }
       }
       steps {
         sh 'git stash'
