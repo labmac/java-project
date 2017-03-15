@@ -19,7 +19,7 @@ pipeline {
         sh 'ant -f build.xml -v'
       }
       post {
-        success {
+        always {
           archiveArtifacts artifacts: 'dist/*.jar', fingerprint: true
         }
       }
@@ -41,13 +41,21 @@ pipeline {
         sh "java -jar rectangle_${env.BUILD_NUMBER}.jar 3 4"
       }
     }
-    stage("Test on Debian") {
+    stage('Promote Development to Master') {
       agent {
-        docker 'openjdk:8u121-jre'
+        label 'apache'
+      }
+      when {
+        branch 'development'
       }
       steps {
-        sh "wget http://brandon4231.mylabserver.com/rectangles/all/rectangle_${env.BUILD_NUMBER}.jar"
-        sh "java -jar rectangle_${env.BUILD_NUMBER}.jar 3 4"
+        sh 'git stash'
+        sh "git tag ${env.BUILD_NUMBER}"
+        sh "git push origin ${env.BUILD_NUMBER}"
+        sh 'git checkout master'
+        sh 'git pull origin master'
+        sh 'git merge development'
+        sh 'git push origin master'
       }
     }
   }
