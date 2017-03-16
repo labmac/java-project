@@ -48,7 +48,7 @@ pipeline {
         label 'apache'
       }
       when {
-        branch '*/development'
+        branch '*'
       }
       steps {
         sh 'git stash'
