@@ -7,7 +7,7 @@ pipeline {
         label 'apache'
       }
       steps {
-        echo "${env.BRANCH_NAME}"
+        sh 'export GIT_BRANCH=$(git describe --all | awk -F "/" \'{print $NF}\')'
         sh 'ant -f test.xml -v'
         junit 'reports/result.xml'
       }
@@ -42,6 +42,22 @@ pipeline {
         sh "java -jar rectangle_${env.BUILD_NUMBER}.jar 3 4"
       }
     }
-
+    stage('Promote Development to Master') {
+      agent {
+        label 'apache'
+      }
+      when {
+        expression {true}
+      }
+      steps {
+        sh 'git stash'
+        sh "git tag ${env.BUILD_NUMBER}"
+        sh "git push origin ${env.BUILD_NUMBER}"
+        sh 'git checkout master'
+        sh 'git pull origin master'
+        sh 'git merge development'
+        sh 'git push origin master'
+      }
+    }
   }
 }
