@@ -48,7 +48,7 @@ pipeline {
         label 'apache'
       }
       when {
-        branch '*'
+        true
       }
       steps {
         sh 'git stash'
