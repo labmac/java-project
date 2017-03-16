@@ -48,7 +48,7 @@ pipeline {
         label 'apache'
       }
       when {
-        expression { $env.GIT_BRANCH == 'development' }
+        expression { env.GIT_BRANCH == 'development' }
       }
       steps {
         sh 'git stash'
