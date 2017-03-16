@@ -7,8 +7,8 @@ pipeline {
         label 'apache'
       }
       steps {
-        sh 'export GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)'
-        echo "$GIT_BRANCH"
+        sh 'export GIT_BRANCH=$(git describe --all | awk -F "/" \'{print $NF}\')'
+        echo "${env.GIT_BRANCH}"
         sh 'ant -f test.xml -v'
         junit 'reports/result.xml'
       }
