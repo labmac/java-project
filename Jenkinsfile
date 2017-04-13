@@ -17,34 +17,6 @@ pipeline {
         sayHello 'Awesome Student!'
       }
     }
-    stage('Printing Git Info') {
-      agent any
-
-      steps {
-        script {
-          def myLib = new linuxacademy.git.gitStuff();
-
-          echo "${env.WORKSPACE}/.git"
-
-          echo myLib.gitInfo("${env.WORKSPACE}/.git", 'branch')
-
-          echo myLib.gitInfo("${env.WORKSPACE}/.git", 'commit')
-        }
-      }
-    }
-    stage('Git Information') {
-      agent any
-
-      steps {
-        echo "My Branch Name: ${env.BRANCH_NAME}"
-
-        script {
-          def myLib = new linuxacademy.git.gitStuff();
-
-          echo "My Commit: ${myLib.gitCommit("${env.WORKSPACE}/.git")}"
-        }
-      }
-    }
     stage('Unit Tests') {
       agent {
         label 'apache'
