@@ -120,7 +120,7 @@ pipeline {
         branch 'development'
       }
       steps {
-        build job: '/My%20Multibranch%20Java%20Project/master', parameters: [string(name: 'devBuild', value: "${env.BUILD_NUMBER}")] , propagate: false
+        build job: 'My Multibranch Java Project/master', parameters: [string(name: 'devBuild', value: "${env.BUILD_NUMBER}")] , propagate: false
       }
     }
   }
