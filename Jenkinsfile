@@ -5,6 +5,10 @@ pipeline {
     MAJOR_VERSION = 1
   }
 
+  parameters {
+    string(name: 'devBuild', defaultValue: 'none', description: 'Build number for the upstream dev build.')
+  }
+
   stages {
     stage('Say Hello') {
       agent any
@@ -12,7 +16,21 @@ pipeline {
       steps {
         sayHello 'Awesome Student!'
       }
+    }
+    stage('Printing Git Info') {
+      agent any
 
+      steps {
+        script {
+          def myLib = new linuxacademy.git.gitStuff();
+
+          echo "${env.WORKSPACE}/.git"
+
+          echo myLib.gitInfo("${env.WORKSPACE}/.git", 'branch')
+
+          echo myLib.gitInfo("${env.WORKSPACE}/.git", 'commit')
+        }
+      }
     }
     stage('Git Information') {
       agent any
@@ -119,6 +137,17 @@ pipeline {
             to: "brandon@linuxacademy.com"
           )
         }
+      }
+    }
+    stage('Trigger Master Build') {
+      agent {
+        label 'apache'
+      }
+      when {
+        branch 'development'
+      }
+      steps {
+        build job: '/My%20Multibranch%20Java%20Project/job/master', parameters: [string(name: 'devBuild', value: "${env.BUILD_NUMBER}")] , propagate: false
       }
     }
   }
